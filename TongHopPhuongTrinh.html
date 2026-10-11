@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tổng Hợp Phương Trình Hóa Học Kim Loại</title>
+  
+  <!-- MathJax cấu hình hiển thị công thức LaTeX -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --secondary: #0d9488;
+      --accent: #d97706;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 2.5rem;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 1.5rem;
+    }
+
+    h1 {
+      font-size: 1.85rem;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .section {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+
+    .section-title {
+      font-size: 1.35rem;
+      color: var(--primary);
+      border-left: 4px solid var(--secondary);
+      padding-left: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .group {
+      margin-bottom: 1.5rem;
+    }
+
+    .group:last-child {
+      margin-bottom: 0;
+    }
+
+    .group-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .group-note {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-style: italic;
+      margin-bottom: 0.75rem;
+    }
+
+    .equation-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .equation-item {
+      display: flex;
+      align-items: center;
+      padding: 0.5rem 0.75rem;
+      background: #f1f5f9;
+      border-radius: 6px;
+      overflow-x: auto;
+    }
+
+    .equation-item .note {
+      font-size: 0.85rem;
+      color: var(--accent);
+      margin-left: 1rem;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>Hệ Thống Tính Chất Hóa Học Của Kim Loại</h1>
+    <p class="subtitle">Tổng hợp và phân loại logic toàn bộ phương trình hóa học từ tài liệu lý thuyết.</p>
+  </header>
+
+  <!-- Mục 1: Tác dụng với Phi kim -->
+  <section class="section">
+    <h2 class="section-title">1. Tác Dụng Với Phi Kim</h2>
+
+    <div class="group">
+      <div class="group-title">Tác dụng với oxygen ($O_2$)</div>
+      <div class="group-note">Tạo oxide kim loại tương ứng; một số kim loại như Al, Zn, Cr tạo màng oxide bảo vệ ngay ở điều kiện thường.</div>
+      <ul class="equation-list">
+        <li class="equation-item">$$3\text{Fe} + 2\text{O}_2 \xrightarrow{t^\circ} \text{Fe}_3\text{O}_4$$</li>
+        <li class="equation-item">$$4\text{Al} + 3\text{O}_2 \xrightarrow{t^\circ} 2\text{Al}_2\text{O}_3$$</li>
+        <li class="equation-item">$$2\text{Zn} + \text{O}_2 \xrightarrow{t^\circ} 2\text{ZnO}$$</li>
+        <li class="equation-item">$$2\text{Cu} + \text{O}_2 \xrightarrow{t^\circ} 2\text{CuO}$$</li>
+        <li class="equation-item">$$2\text{Mg} + \text{O}_2 \xrightarrow{t^\circ} 2\text{MgO}$$</li>
+        <li class="equation-item">$$2\text{Ca} + \text{O}_2 \xrightarrow{t^\circ} 2\text{CaO}$$</li>
+        <li class="equation-item">
+          $$4\text{Cr} + 3\text{O}_2 \longrightarrow 2\text{Cr}_2\text{O}_3$$
+          <span class="note">(Tạo màng oxide mỏng, bền bảo vệ ở đk thường)</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="group">
+      <div class="group-title">Tác dụng với chlorine ($\text{Cl}_2$)</div>
+      <div class="group-note">Tạo muối chloride ở mức hóa trị cao nhất đối với kim loại đa hóa trị (như Fe tạo Fe(III)).</div>
+      <ul class="equation-list">
+        <li class="equation-item">$$2\text{Na} + \text{Cl}_2 \xrightarrow{t^\circ} 2\text{NaCl}$$</li>
+        <li class="equation-item">$$2\text{Fe} + 3\text{Cl}_2 \xrightarrow{t^\circ} 2\text{FeCl}_3$$</li>
+        <li class="equation-item">$$\text{Cu} + \text{Cl}_2 \xrightarrow{t^\circ} \text{CuCl}_2$$</li>
+        <li class="equation-item">$$\text{Mg} + \text{Cl}_2 \xrightarrow{t^\circ} \text{MgCl}_2$$</li>
+        <li class="equation-item">$$\text{Zn} + \text{Cl}_2 \xrightarrow{t^\circ} \text{ZnCl}_2$$</li>
+        <li class="equation-item">$$2\text{Al} + 3\text{Cl}_2 \xrightarrow{t^\circ} 2\text{AlCl}_3$$</li>
+      </ul>
+    </div>
+
+    <div class="group">
+      <div class="group-title">Tác dụng với lưu huỳnh / sulfur ($\text{S}$)</div>
+      <div class="group-note">Tạo muối sulfide (Fe thể hiện mức hóa trị II).</div>
+      <ul class="equation-list">
+        <li class="equation-item">$$2\text{Al} + 3\text{S} \xrightarrow{t^\circ} \text{Al}_2\text{S}_3$$</li>
+        <li class="equation-item">$$\text{Mg} + \text{S} \xrightarrow{t^\circ} \text{MgS}$$</li>
+        <li class="equation-item">$$\text{Zn} + \text{S} \xrightarrow{t^\circ} \text{ZnS}$$</li>
+        <li class="equation-item">$$\text{Fe} + \text{S} \xrightarrow{t^\circ} \text{FeS}$$</li>
+        <li class="equation-item">$$\text{Cu} + \text{S} \xrightarrow{t^\circ} \text{CuS}$$</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Mục 2: Tác dụng với Nước -->
+  <section class="section">
+    <h2 class="section-title">2. Tác Dụng Với Nước ($\text{H}_2\text{O}$)</h2>
+
+    <div class="group">
+      <div class="group-title">Ở nhiệt độ thường (Kim loại kiềm, kiềm thổ)</div>
+      <ul class="equation-list">
+        <li class="equation-item">$$2\text{Na} + 2\text{H}_2\text{O} \longrightarrow 2\text{NaOH} + \text{H}_2 \uparrow$$</li>
+        <li class="equation-item">$$2\text{K} + 2\text{H}_2\text{O} \longrightarrow 2\text{KOH} + \text{H}_2 \uparrow$$</li>
+        <li class="equation-item">$$\text{Ca} + 2\text{H}_2\text{O} \longrightarrow \text{Ca(OH)}_2 + \text{H}_2 \uparrow$$</li>
+      </ul>
+    </div>
+
+    <div class="group">
+      <div class="group-title">Ở nhiệt độ cao (Với hơi nước)</div>
+      <ul class="equation-list">
+        <li class="equation-item">$$\text{Zn} + \text{H}_2\text{O} \xrightarrow{t^\circ} \text{ZnO} + \text{H}_2 \uparrow$$</li>
+        <li class="equation-item">
+          $$3\text{Fe} + 4\text{H}_2\text{O} \xrightarrow{t^\circ < 570^\circ\text{C}} \text{Fe}_3\text{O}_4 + 4\text{H}_2 \uparrow$$
+        </li>
+        <li class="equation-item">
+          $$\text{Fe} + \text{H}_2\text{O} \xrightarrow{t^\circ > 570^\circ\text{C}} \text{FeO} + \text{H}_2 \uparrow$$
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Mục 3: Tác dụng với Acid -->
+  <section class="section">
+    <h2 class="section-title">3. Tác Dụng Với Dung Dịch Acid (HCl)</h2>
+    <div class="group">
+      <div class="group-note">Kim loại đứng trước Hydrogen trong dãy hoạt động hóa học phản ứng giải phóng khí $H_2$.</div>
+      <ul class="equation-list">
+        <li class="equation-item">$$\text{Fe} + 2\text{HCl} \longrightarrow \text{FeCl}_2 + \text{H}_2 \uparrow$$</li>
+        <li class="equation-item">$$2\text{Al} + 6\text{HCl} \longrightarrow 2\text{AlCl}_3 + 3\text{H}_2 \uparrow$$</li>
+        <li class="equation-item">$$\text{Zn} + 2\text{HCl} \longrightarrow \text{ZnCl}_2 + \text{H}_2 \uparrow$$</li>
+        <li class="equation-item">$$\text{Mg} + 2\text{HCl} \longrightarrow \text{MgCl}_2 + \text{H}_2 \uparrow$$</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Mục 4: Tác dụng với Muối -->
+  <section class="section">
+    <h2 class="section-title">4. Tác Dụng Với Dung Dịch Muối</h2>
+
+    <div class="group">
+      <div class="group-title">Tác dụng với muối đồng ($\text{CuSO}_4, \text{CuCl}_2$)</div>
+      <ul class="equation-list">
+        <li class="equation-item">$$\text{Fe} + \text{CuSO}_4 \longrightarrow \text{FeSO}_4 + \text{Cu} \downarrow$$</li>
+        <li class="equation-item">$$\text{Fe} + \text{CuCl}_2 \longrightarrow \text{FeCl}_2 + \text{Cu} \downarrow$$</li>
+        <li class="equation-item">$$\text{Mg} + \text{CuSO}_4 \longrightarrow \text{MgSO}_4 + \text{Cu} \downarrow$$</li>
+        <li class="equation-item">$$2\text{Al} + 3\text{CuSO}_4 \longrightarrow \text{Al}_2(\text{SO}_4)_3 + 3\text{Cu} \downarrow$$</li>
+        <li class="equation-item">$$\text{Zn} + \text{CuSO}_4 \longrightarrow \text{ZnSO}_4 + \text{Cu} \downarrow$$</li>
+      </ul>
+    </div>
+
+    <div class="group">
+      <div class="group-title">Tác dụng với muối bạc ($\text{AgNO}_3$)</div>
+      <ul class="equation-list">
+        <li class="equation-item">$$\text{Fe} + 2\text{AgNO}_3 \longrightarrow \text{Fe(NO}_3)_2 + 2\text{Ag} \downarrow$$</li>
+        <li class="equation-item">$$\text{Cu} + 2\text{AgNO}_3 \longrightarrow \text{Cu(NO}_3)_2 + 2\text{Ag} \downarrow$$</li>
+        <li class="equation-item">$$\text{Zn} + 2\text{AgNO}_3 \longrightarrow \text{Zn(NO}_3)_2 + 2\text{Ag} \downarrow$$</li>
+        <li class="equation-item">$$\text{Al} + 3\text{AgNO}_3 \longrightarrow \text{Al(NO}_3)_3 + 3\text{Ag} \downarrow$$</li>
+        <li class="equation-item">$$\text{Mg} + 2\text{AgNO}_3 \longrightarrow \text{Mg(NO}_3)_2 + 2\text{Ag} \downarrow$$</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+</body>
+</html>

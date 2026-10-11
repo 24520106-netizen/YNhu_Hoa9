@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bài 19–20: Dãy hoạt động hoá học · Tách kim loại và hợp kim</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#E9EDF0; --surface:#F7F9FA; --ink:#16202A; --muted:#55636F; --line:#C5CED5;
+  --steel:#5D7180; --copper:#9C5A2C; --gold:#B08A1E; --hot:#6D3FA0; --ok:#2F7A4F; --no:#A3343A;
+  --tile-text:#fff;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#141A20; --surface:#1C242C; --ink:#E6ECF0; --muted:#9AA8B3; --line:#33404B;
+    --steel:#8FA3B1; --copper:#D08A55; --gold:#D9B548; --hot:#A47BD6; --ok:#5DBB86; --no:#E2787D;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141A20; --surface:#1C242C; --ink:#E6ECF0; --muted:#9AA8B3; --line:#33404B;
+  --steel:#8FA3B1; --copper:#D08A55; --gold:#D9B548; --hot:#A47BD6; --ok:#5DBB86; --no:#E2787D;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{height:100%;margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:clamp(15px,1.15vw + 8px,22px);line-height:1.5;overflow:hidden}
+.deck{position:relative;height:100%;display:flex;flex-direction:column}
+.progress{height:4px;background:var(--line)}
+.progress span{display:block;height:100%;background:linear-gradient(90deg,var(--hot),var(--copper),var(--gold));transition:width .3s}
+.stage{flex:1;position:relative;overflow:hidden}
+.slide{position:absolute;inset:0;overflow-y:auto;padding:clamp(18px,4vw,64px) clamp(18px,6vw,96px) 24px;
+  display:none;flex-direction:column}
+.slide.active{display:flex}
+.inner{max-width:1180px;width:100%;margin:auto 0;margin-left:auto;margin-right:auto}
+h1,h2,h3{margin:0;line-height:1.15;letter-spacing:-.01em}
+h2{font-size:1.9em;font-weight:800;margin-bottom:.6em}
+h3{font-size:1.05em;font-weight:600;margin-bottom:.35em}
+p{margin:.3em 0 .7em}
+ul{margin:.2em 0 .8em;padding-left:1.2em}
+li{margin:.25em 0}
+.lesson{color:var(--muted);font-weight:600;font-size:.85em;margin-bottom:.4em}
+.lead{font-size:1.1em;color:var(--muted);max-width:60ch}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:clamp(14px,2.4vw,32px)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:1em 1.2em}
+.panel.q{border-left:5px solid var(--copper)}
+.note{border-left:4px solid var(--steel);padding:.4em 0 .4em 1em;color:var(--muted)}
+/* equations */
+.eq{display:block;font-size:1.1em;margin:.55em 0;white-space:nowrap;overflow-x:auto;padding:.15em 0 .1em}
+.ar{display:inline-block;position:relative;min-width:2.6em;text-align:center;margin:0 .25em;padding-top:.55em}
+.ar::after{content:"⟶";font-size:1.2em}
+.ar i{position:absolute;top:-.1em;left:-1em;right:-1em;font-size:.55em;font-style:normal;color:var(--muted);white-space:nowrap}
+sub{font-size:.7em}
+.yes{color:var(--ok);font-weight:600}.no{color:var(--no);font-weight:600}
+/* title slides */
+.title-slide h1{font-size:clamp(2.2em,5vw,4.2em);font-weight:800;max-width:16ch;line-height:1.05}
+.title-slide .num{font-size:clamp(5em,14vw,11em);font-weight:800;line-height:.85;color:transparent;
+  -webkit-text-stroke:2px var(--copper);margin-bottom:.1em}
+.goals li{margin:.45em 0}
+/* activity series */
+.series{display:flex;flex-wrap:wrap;gap:6px;margin:.6em 0 1em}
+.el{flex:1 1 56px;min-width:52px;aspect-ratio:1/1.08;border:0;border-radius:6px;color:var(--tile-text);
+  font:inherit;font-weight:800;font-size:1.35em;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  position:relative;transition:transform .15s}
+.el small{position:absolute;bottom:4px;font-size:.38em;font-weight:500;opacity:.9}
+.el:hover{transform:translateY(-3px)}
+.el[aria-pressed="true"]{outline:3px solid var(--ink);outline-offset:2px}
+.el:focus-visible{outline:3px solid var(--copper);outline-offset:2px}
+.el.h{background:transparent!important;color:var(--ink);border:2px dashed var(--muted)}
+.scale{display:flex;justify-content:space-between;font-size:.8em;color:var(--muted);margin-top:-.6em}
+.mnemonic{font-size:1.05em}
+.mnemonic b{color:var(--copper)}
+.info{min-height:7.5em}
+.info dl{display:grid;grid-template-columns:auto 1fr;gap:.25em 1em;margin:.3em 0 0}
+.info dt{color:var(--muted)}
+.info dd{margin:0}
+/* flow */
+.flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:10px;margin:.8em 0}
+.flow .box{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:.7em 1em;flex:1 1 160px;font-weight:600}
+.flow .arrow{align-self:center;color:var(--copper);font-size:1.4em}
+.flow .box small{display:block;font-weight:400;color:var(--muted);font-size:.8em}
+.method{border-top:5px solid var(--c);}
+.method .tag{display:inline-block;font-weight:800;color:var(--c);font-size:1.4em;margin-bottom:.2em}
+/* reveal */
+.reveal-btn{font:inherit;font-weight:600;background:var(--ink);color:var(--bg);border:0;border-radius:6px;padding:.45em 1em;cursor:pointer;margin-top:.4em}
+.reveal-btn:focus-visible{outline:3px solid var(--copper);outline-offset:2px}
+.answer{display:none;margin-top:.6em}
+.answer.show{display:block}
+table{border-collapse:collapse;width:100%;font-size:.95em}
+th,td{text-align:left;padding:.45em .7em;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:600}
+.scroll{overflow-x:auto}
+svg text{font-family:inherit}
+/* nav */
+.bar{display:flex;align-items:center;gap:12px;padding:10px clamp(14px,4vw,40px);border-top:1px solid var(--line);background:var(--surface)}
+.bar .where{flex:1;font-size:.8em;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar button{font:inherit;font-size:.9em;font-weight:600;background:transparent;color:var(--ink);border:1px solid var(--line);
+  border-radius:6px;padding:.35em .9em;cursor:pointer}
+.bar button:hover{border-color:var(--ink)}
+.bar button:focus-visible{outline:3px solid var(--copper);outline-offset:2px}
+.bar button:disabled{opacity:.35;cursor:default}
+.count{font-variant-numeric:tabular-nums;font-size:.85em;color:var(--muted);min-width:4.5em;text-align:center}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="deck">
+<div class="progress"><span id="prog"></span></div>
+<main class="stage" id="stage">
+
+<!-- ================= BÀI 19 ================= -->
+<section class="slide title-slide" data-lesson="Bài 19 · Dãy hoạt động hoá học">
+ <div class="inner">
+  <div class="num">19</div>
+  <h1>Dãy hoạt động hoá học</h1>
+  <p class="lead">Vì sao đồ vật bằng sắt dễ gỉ, còn nhẫn vàng thì vẫn sáng sau nhiều năm?</p>
+ </div>
+</section>
+
+<section class="slide" data-lesson="Bài 19 · Mục tiêu">
+ <div class="inner">
+  <p class="lesson">Bài 19</p>
+  <h2>Sau bài học, em có thể</h2>
+  <ul class="goals">
+   <li>Tiến hành hoặc mô tả thí nghiệm cho kim loại tiếp xúc với nước, dung dịch hydrochloric acid, dung dịch muối.</li>
+   <li>Nêu được dãy hoạt động hoá học: K, Na, Ca, Mg, Al, Zn, Fe, Pb, H, Cu, Ag, Au.</li>
+   <li>Trình bày được ý nghĩa của dãy hoạt động hoá học.</li>
+  </ul>
+ </div>
+</section>
+
+<section class="slide" data-lesson="Bài 19 · Khởi động">
+ <div class="inner">
+  <p class="lesson">Khởi động</p>
+  <h2>Đồ vật nào dễ bị gỉ?</h2>
+  <div class="cols">
+   <div class="panel"><h3>Sắt</h3><p>Dao, đinh, cửa sắt để lâu ngoài không khí ẩm bị gỉ nâu.</p></div>
+   <div class="panel"><h3>Đồng</h3><p>Tượng, nồi đồng dần xỉn màu, có lớp xanh bám ngoài.</p></div>
+   <div class="panel"><h3>Vàng, bạc</h3><p>Trang sức vàng gần như giữ nguyên ánh kim theo thời gian.</p></div>
+  </div>
+  <p class="note">Mỗi kim loại có khả năng tham gia phản ứng hoá học khác nhau. Có thể sắp xếp chúng thành một dãy theo khả năng phản ứng giảm dần.</p>
+ </div>
+</section>
+
+<section class="slide" data-lesson="Bài 19 · Thí nghiệm 1">
+ <div class="inner">
+  <p class="lesson">I. Xây dựng dãy hoạt động hoá học</p>
+  <h2>Thí nghiệm 1: Na, Fe, Cu với nước</h2>
+  <div class="cols">
+   <div>
+    <h3>Cách làm</h3>
+    <ul>
+     <li>Mẩu natri bằng hạt đậu xanh → cho vào chậu nước.</li>
+     <li>Đinh sắt → ống nghiệm (1) chứa nước.</li>
+     <li>Dây đồng → ống nghiệm (2) chứa nước.</li>
+    </ul>
+   </div>
+   <div class="panel">
+    <h3>Hiện tượng</h3>
+    <p><b>Natri</b> chạy trên mặt nước, nóng chảy thành giọt tròn, có khí thoát ra.</p>
+    <span class="eq">2Na + 2H<sub>2</sub>O <span class="ar"></span> 2NaOH + H<sub>2</sub>↑</span>
+    <p><b>Sắt, đồng</b>: không có hiện tượng ở nhiệt độ thường.</p>
+   </div>
+  </div>
+  <p class="note">Kết luận: Na hoạt động hoá học mạnh hơn Fe và Cu.</p>
+ </div>
+</section>
+
+<section class="slide" data-lesson="Bài 19 · Thí nghiệm 2">
+ <div class="inner">
+  <p class="lesson">I. Xây dựng dãy hoạt động hoá học</p>
+  <h2>Thí nghiệm 2: Fe, Cu với dung dịch HCl</h2>
+  <div class="cols">
+   <div class="panel">
+    <h3>Đinh sắt + HCl</h3>
+    <p class="yes">Có bọt khí H<sub>2</sub> thoát ra quanh đinh sắt.</p>
+    <span class="eq">Fe + 2HCl <span class="ar"></span> FeCl<sub>2</sub> + H<sub>2</sub>↑</span>
+    <p>Sắt đẩy được hydrogen ra khỏi acid → <b>Fe mạnh hơn H</b>.</p>
+   </div>
+   <div class="panel">
+    <h3>Dây đồng + HCl</h3>
+    <p class="no">Không có hiện tượng.</p>
+    <p>Đồng không đẩy được hydrogen ra khỏi acid → <b>Cu yếu hơn H</b>.</p>
+   </div>
+  </div>
+  <p class="note">Kết luận: Fe &gt; H &gt; Cu.</p>
+ </div>
+</section>
+
+<section class="slide" data-lesson="Bài 19 · Thí nghiệm 3">
+ <div class="inner">
+  <p class="lesson">I. Xây dựng dãy hoạt động hoá học</p>
+  <h2>Thí nghiệm 3: Cu với dung dịch AgNO<sub>3</sub></h2>
+  <div class="cols">
+   <div>
+    <svg viewBox="0 0 260 220" width="100%" style="max-width:340px" role="img" aria-label="Dây đồng xoắn lò xo trong dung dịch AgNO3, bị phủ lớp bạc">
+     <rect x="70" y="20" width="60" height="180" rx="28" fill="none" stroke="var(--muted)" stroke-width="3"/>
+     <rect x="73" y="80" width="54" height="117" rx="24" fill="var(--steel)" opacity=".18"/>
+     <path d="M100 5 V60" stroke="var(--copper)" stroke-width="4"/>
+     <path d="M100 60 q-18 8 0 16 q18 8 0 16 q-18 8 0 16 q18 8 0 16 q-18 8 0 16 q18 8 0 16" fill="none" stroke="var(--copper)" stroke-width="4"/>
+     <path d="M100 92 q-18 8 0 16 q18 8 0 16 q-18 8 0 16 q18 8 0 16" fill="none" stroke="var(--muted)" stroke-width="7" stroke-dasharray="3 3" opacity=".7"/>
+     <text x="145" y="120" font-size="13" fill="var(--ink)">lớp Ag bám</text>
+     <text x="145" y="175" font-size="13" fill="var(--ink)">dd AgNO₃</text>
+     <text x="20" y="40" font-size="13" fill="var(--copper)">Cu</text>
+    </svg>
+   </div>
+   <div class="panel">
+    <h3>Hiện tượng</h3>
+    <p>Dây đồng được phủ một lớp kim loại màu xám bạc; dung dịch dần chuyển sang màu xanh.</p>
+    <span class="eq">Cu + 2AgNO<sub>3</sub> <span class="ar"></span> Cu(NO<sub>3</sub>)<sub>2</sub> + 2Ag↓</span>
+    <p>Đồng đẩy được bạc ra khỏi muối → <b>Cu mạnh hơn Ag</b>.</p>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-lesson="Bài 19 · Tổng hợp thí nghiệm">
+ <div class="inner">
+  <p class="lesson">I. Xây dựng dãy hoạt động hoá học</p>
+  <h2>Ghép ba thí nghiệm lại</h2>
+  <div class="flow">
+   <div class="box">Na<small>phản ứng mạnh với nước</small></div><div class="arrow">&gt;</div>
+   <div class="box">Fe<small>đẩy H khỏi acid</small></div><div class="arrow">&gt;</div>
+   <div class="box">H</div><div class="arrow">&gt;</div>
+   <div class="box">Cu<small>không tác dụng với HCl</small></div><div class="arrow">&gt;</div>
+   <div class="box">Ag<small>bị Cu đẩy khỏi muối</small></div>
+  </div>
+  <p>Từ nhiều thí nghiệm khác nhau, người ta sắp xếp các kim loại và hydrogen thành dãy theo chiều <b>giảm dần</b> mức độ hoạt động hoá học.</p>
+ </div>
+</section>
+
+<section class="slide" data-lesson="Bài 19 · Dãy hoạt động hoá học">
+ <div class="inner">
+  <p class="lesson">Dãy hoạt động hoá học</p>
+  <h2>Chạm vào từng kim loại để xem tính chất</h2>
+  <div class="series" id="series"></div>
+  <div class="scale"><span>Hoạt động mạnh nhất</span><span>Hoạt động yếu nhất</span></div>
+  <div class="cols" style="margin-top:1em">
+   <div class="panel info" id="info" aria-live="polite"><h3>Chọn một kim loại</h3><p style="color:var(--muted)">Thông tin về phản ứng với nước, acid, dung dịch muối và cách tách kim loại sẽ hiện ở đây.</p></div>
+   <div>
+    <h3>Mẹo nhớ</h3>
+    <p class="mnemonic"><b>K</b>hi <b>N</b>ào <b>C</b>ần <b>M</b>ay <b>Á</b>o <b>Z</b>áp <b>S</b>ắt <b>P</b>hải <b>H</b>ỏi <b>C</b>ửa <b>H</b>àng <b>Á</b> <b>Â</b>u</p>
+    <p style="color:var(--muted);font-size:.85em">K · Na · Ca · Mg · Al · Zn · Fe · Pb · H · Cu · Ag · Au</p>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-lesson="Bài 19 · Ý nghĩa">
+ <div class="inner">
+  <p class="lesson">II. Ý nghĩa dãy hoạt động hoá học</p>
+  <h2>Dãy cho ta biết điều gì?</h2>
+  <div class="cols">
+   <div class="panel"><h3>Mức độ hoạt động</h3><p>Từ trái sang phải, mức độ hoạt động hoá học của kim loại giảm dần.</p></div>
+   <div class="panel"><h3>Với nước</h3><p>K, Na, Ca,… tác dụng với nước ở điều kiện thường, tạo hydroxide và giải phóng H<sub>2</sub>.</p>
+    <span class="eq">2K + 2H<sub>2</sub>O <span class="ar"></span> 2KOH + H<sub>2</sub>↑</span></div>
+   <div class="panel"><h3>Với acid</h3><p>Kim loại đứng trước H tác dụng với dung dịch acid (HCl, H<sub>2</sub>SO<sub>4</sub> loãng), giải phóng H<sub>2</sub>.</p>
+    <span class="eq">Zn + 2HCl <span class="ar"></span> ZnCl<sub>2</sub> + H<sub>2</sub>↑</span></div>
+   <div class="panel"><h3>Với dung dịch muối</h3><p>Kim loại đứng trước (trừ K, Na, Ca,…) đẩy được kim loại đứng sau ra khỏi dung dịch muối.</p>
+    <span class="eq">Fe + CuSO<sub>4</sub> <span class="ar"></span> FeSO<sub>4</sub> + Cu</span></div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-lesson="Bài 19 · Luyện tập">
+ <div class="inner">
+  <p class="lesson">Luyện tập</p>
+  <h2>Dự đoán hiện tượng, viết phương trình</h2>
+  <div class="cols">
+   <div class="panel q">
+    <h3>1. Mg, Ag, Zn vào dung dịch H<sub>2</sub>SO<sub>4</sub> loãng</h3>
+    <button class="reveal-btn" aria-expanded="false">Hiện đáp án</button>
+    <div class="answer">
+     <p>Mg và Zn tan, có bọt khí; Ag không phản ứng (đứng sau H).</p>
+     <span class="eq">Mg + H<sub>2</sub>SO<sub>4</sub> <span class="ar"></span> MgSO<sub>4</sub> + H<sub>2</sub>↑</span>
+     <span class="eq">Zn + H<sub>2</sub>SO<sub>4</sub> <span class="ar"></span> ZnSO<sub>4</sub> + H<sub>2</sub>↑</span>
+    </div>
+   </div>
+   <div class="panel q">
+    <h3>2. Viên kẽm vào dung dịch AgNO<sub>3</sub></h3>
+    <button class="reveal-btn" aria-expanded="false">Hiện đáp án</button>
+    <div class="answer">
+     <p>Có lớp bạc màu xám bám ngoài viên kẽm (Zn đứng trước Ag).</p>
+     <span class="eq">Zn + 2AgNO<sub>3</sub> <span class="ar"></span> Zn(NO<sub>3</sub>)<sub>2</sub> + 2Ag↓</span>
+    </div>
+   </div>
+   <div class="panel q">
+    <h3>3. Cu, Fe, Ca vào 3 cốc nước cất</h3>
+    <button class="reveal-btn" aria-expanded="false">Hiện đáp án</button>
+    <div class="answer">
+     <p>Chỉ Ca phản ứng, có bọt khí, dung dịch hơi đục. Cu, Fe không phản ứng ở nhiệt độ thường.</p>
+     <span class="eq">Ca + 2H<sub>2</sub>O <span class="ar"></span> Ca(OH)<sub>2</sub> + H<sub>2</sub>↑</span>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-lesson="Bài 19 · Em đã học">
+ <div class="inner">
+  <p class="lesson">Tổng kết Bài 19</p>
+  <h2>Em đã học</h2>
+  <ul>
+   <li>Dãy hoạt động hoá học được xây dựng từ thực nghiệm: <b>K, Na, Ca, Mg, Al, Zn, Fe, Pb, H, Cu, Ag, Au</b>.</li>
+   <li>Từ trái sang phải, mức độ hoạt động hoá học giảm dần.</li>
+   <li>K, Na, Ca,… tác dụng với nước ở điều kiện thường, giải phóng khí hydrogen.</li>
+   <li>Kim loại đứng trước H tác dụng với dung dịch acid, giải phóng khí hydrogen.</li>
+   <li>Kim loại đứng trước (trừ K, Na, Ca,…) đẩy được kim loại đứng sau ra khỏi dung dịch muối.</li>
+  </ul>
+ </div>
+</section>
+
+<!-- ================= BÀI 20 ================= -->
+<section class="slide title-slide" data-lesson="Bài 20 · Tách kim loại và việc sử dụng hợp kim">
+ <div class="inner">
+  <div class="num">20</div>
+  <h1>Tách kim loại và việc sử dụng hợp kim</h1>
+  <p class="lead">Kim loại được tách từ nguồn nguyên liệu nào và sản xuất bằng cách nào?</p>
+ </div>
+</section>
+
+<section class="slide" data-lesson="Bài 20 · Mục tiêu">
+ <div class="inner">
+  <p class="lesson">Bài 20</p>
+  <h2>Sau bài học, em có thể</h2>
+  <ul class="goals">
+   <li>Nêu được phương pháp tách kim loại theo mức độ hoạt động hoá học.</li>
+   <li>Trình bày quá trình tách sắt khỏi iron(III) oxide bằng carbon oxide, tách nhôm bằng điện phân, tách kẽm khỏi zinc sulfide.</li>
+   <li>Nêu khái niệm hợp kim và giải thích vì sao kim loại thường được dùng dưới dạng hợp kim.</li>
+   <li>Nêu thành phần, tính chất của một số hợp kim phổ biến.</li>
+   <li>Trình bày các giai đoạn cơ bản của quá trình sản xuất gang và thép.</li>
+  </ul>
+ </div>
+</section>
+
+<section class="slide" data-lesson="Bài 20 · Kim loại trong tự nhiên">
+ <div class="inner">
+  <p class="lesson">I. Phương pháp tách kim loại</p>
+  <h2>Kim loại nằm trong quặng</h2>
+  <p>Trong tự nhiên, kim loại chủ yếu tồn tại trong quặng dưới dạng hợp chất như oxide, muối.</p>
+  <div class="scroll"><table>
+   <tr><th>Quặng</th><th>Thành phần chủ yếu</th><th>Kim loại thu được</th></tr>
+   <tr><td>Bauxite</td><td>Al<sub>2</sub>O<sub>3</sub> (aluminium oxide)</td><td>Nhôm</td></tr>
+   <tr><td>Hematite</td><td>Fe<sub>2</sub>O<sub>3</sub> (iron(III) oxide)</td><td>Sắt</td></tr>
+   <tr><td>Sphalerite</td><td>ZnS (zinc sulfide)</td><td>Kẽm</td></tr>
+  </table></div>
+  <p class="note">Một số kim loại quý như vàng có thể tồn tại dưới dạng đơn chất, là các hạt nhỏ lẫn trong đất, cát.</p>
+ </div>
+</section>
+
+<section class="slide" data-lesson="Bài 20 · Quy trình tách kim loại">
+ <div class="inner">
+  <p class="lesson">I. Phương pháp tách kim loại</p>
+  <h2>Các bước tách kim loại từ quặng</h2>
+  <div class="flow">
+   <div class="box">Quặng</div><div class="arrow">→</div>
+   <div class="box">Làm giàu quặng<small>loại bỏ đất, cát, đá…</small></div><div class="arrow">→</div>
+   <div class="box">Hợp chất chứa kim loại</div><div class="arrow">→</div>
+   <div class="box">Phương pháp hoá học<small>chọn theo mức độ hoạt động</small></div><div class="arrow">→</div>
+   <div class="box">Kim loại</div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-lesson="Bài 20 · Ba phương pháp">
+ <div class="inner">
+  <p class="lesson">I. Phương pháp tách kim loại</p>
+  <h2>Chọn phương pháp theo dãy hoạt động</h2>
+  <div class="series" id="series2" aria-hidden="true"></div>
+  <div class="cols">
+   <div class="panel method" style="--c:var(--hot)"><span class="tag">Điện phân nóng chảy</span>
+    <p>Cho kim loại hoạt động hoá học <b>mạnh</b>: Na, Ca, Mg, Al,…</p></div>
+   <div class="panel method" style="--c:var(--steel)"><span class="tag">Nhiệt luyện</span>
+    <p>Cho kim loại hoạt động <b>trung bình</b>: Fe, Zn,… Dùng C, CO, H<sub>2</sub>, Al,… khử oxide kim loại ở nhiệt độ cao.</p></div>
+   <div class="panel method" style="--c:var(--gold)"><span class="tag">Thuỷ luyện</span>
+    <p>Cho kim loại hoạt động <b>yếu</b>: Ag, Au,… Chuyển thành muối tan, rồi dùng kim loại mạnh hơn đẩy ra khỏi dung dịch.</p></div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-lesson="Bài 20 · Tách nhôm">
+ <div class="inner">
+  <p class="lesson">II. Tách một số kim loại có nhiều ứng dụng</p>
+  <h2>Tách nhôm: điện phân Al<sub>2</sub>O<sub>3</sub> nóng chảy</h2>
+  <div class="cols">
+   <div>
+    <svg viewBox="0 0 340 230" width="100%" style="max-width:420px" role="img" aria-label="Sơ đồ bể điện phân aluminium oxide nóng chảy">
+     <rect x="30" y="60" width="280" height="150" fill="none" stroke="var(--ink)" stroke-width="10"/>
+     <rect x="35" y="90" width="270" height="85" fill="var(--copper)" opacity=".25"/>
+     <rect x="35" y="175" width="270" height="30" fill="var(--steel)" opacity=".55"/>
+     <g fill="var(--ink)"><rect x="110" y="20" width="16" height="115"/><rect x="160" y="20" width="16" height="115"/><rect x="210" y="20" width="16" height="115"/></g>
+     <text x="240" y="30" font-size="22" fill="var(--no)" font-weight="800">+</text>
+     <text x="318" y="70" font-size="22" fill="var(--steel)" font-weight="800">−</text>
+     <text x="50" y="125" font-size="12" fill="var(--ink)">Al₂O₃ + cryolite nóng chảy</text>
+     <text x="130" y="195" font-size="12" fill="var(--bg)" font-weight="600">Al nóng chảy</text>
+     <text x="40" y="225" font-size="11" fill="var(--muted)">Cực dương, cực âm bằng than chì</text>
+    </svg>
+   </div>
+   <div>
+    <p><b>Nguyên liệu:</b> quặng bauxite (thành phần chính Al<sub>2</sub>O<sub>3</sub>).</p>
+    <span class="eq">2Al<sub>2</sub>O<sub>3</sub> <span class="ar"><i>điện phân nóng chảy, cryolite</i></span> 4Al + 3O<sub>2</sub></span>
+    <p class="note">Cryolite được thêm vào để hạ nhiệt độ nóng chảy của Al<sub>2</sub>O<sub>3</sub>, giúp tiết kiệm năng lượng.</p>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-lesson="Bài 20 · Tách sắt và kẽm">
+ <div class="inner">
+  <p class="lesson">II. Tách một số kim loại có nhiều ứng dụng</p>
+  <h2>Tách sắt và kẽm bằng nhiệt luyện</h2>
+  <div class="cols">
+   <div class="panel">
+    <h3>Sắt từ iron(III) oxide</h3>
+    <p>Ở nhiệt độ cao, carbon monoxide khử Fe<sub>2</sub>O<sub>3</sub>:</p>
+    <span class="eq">Fe<sub>2</sub>O<sub>3</sub> + 3CO <span class="ar"><i>t°</i></span> 2Fe + 3CO<sub>2</sub></span>
+   </div>
+   <div class="panel">
+    <h3>Kẽm từ zinc sulfide</h3>
+    <p>Bước 1: đốt quặng trong không khí để chuyển ZnS thành ZnO.</p>
+    <span class="eq">2ZnS + 3O<sub>2</sub> <span class="ar"><i>t°</i></span> 2ZnO + 2SO<sub>2</sub></span>
+    <p>Bước 2: dùng carbon khử ZnO.</p>
+    <span class="eq">ZnO + C <span class="ar"><i>t°</i></span> Zn + CO</span>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-lesson="Bài 20 · Thảo luận">
+ <div class="inner">
+  <p class="lesson">Thảo luận</p>
+  <h2>Suy nghĩ cùng nhau</h2>
+  <div class="cols">
+   <div class="panel q">
+    <h3>1. Tách kẽm và tách sắt giống, khác nhau thế nào?</h3>
+    <button class="reveal-btn" aria-expanded="false">Hiện đáp án</button>
+    <div class="answer">
+     <p><b>Giống:</b> đều là nhiệt luyện, dùng chất khử (C, CO) tác dụng với oxide kim loại ở nhiệt độ cao.</p>
+     <p><b>Khác:</b> sắt được khử trực tiếp từ oxide trong quặng; kẽm phải qua thêm bước đốt ZnS thành ZnO, và chất khử là C thay vì CO.</p>
+    </div>
+   </div>
+   <div class="panel q">
+    <h3>2. Có thể tách natri bằng nhiệt luyện như kẽm không?</h3>
+    <button class="reveal-btn" aria-expanded="false">Hiện đáp án</button>
+    <div class="answer">
+     <p><b>Không.</b> Natri hoạt động hoá học rất mạnh, hợp chất của nó rất bền nên C, CO không khử được. Phải dùng điện phân nóng chảy.</p>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-lesson="Bài 20 · Hợp kim">
+ <div class="inner">
+  <p class="lesson">III. Hợp kim</p>
+  <h2>Hợp kim là gì?</h2>
+  <div class="cols">
+   <div>
+    <p><b>Hợp kim</b> là vật liệu kim loại chứa ít nhất một kim loại cơ bản và một số kim loại hoặc phi kim khác.</p>
+    <p><b>Kim loại cơ bản</b> là kim loại chiếm thành phần chính trong hợp kim. Ví dụ: thép có kim loại cơ bản là sắt; đuy-ra có kim loại cơ bản là nhôm.</p>
+   </div>
+   <div class="panel">
+    <h3>Vì sao thường dùng hợp kim?</h3>
+    <p>So với kim loại nguyên chất, hợp kim thường cứng hơn, bền hơn, chống ăn mòn và gỉ sét tốt hơn, nên phù hợp với nhiều ứng dụng trong đời sống và công nghiệp.</p>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-lesson="Bài 20 · Hợp kim phổ biến">
+ <div class="inner">
+  <p class="lesson">III. Hợp kim</p>
+  <h2>Một số hợp kim phổ biến</h2>
+  <div class="scroll"><table>
+   <tr><th>Hợp kim</th><th>Thành phần</th><th>Tính chất</th><th>Ứng dụng</th></tr>
+   <tr><td><b>Gang</b></td><td>Fe, C (2–5%) và nguyên tố khác</td><td>Cứng, giòn hơn thép</td><td>Đúc chi tiết máy, ống dẫn nước, nắp cống</td></tr>
+   <tr><td><b>Thép</b></td><td>Fe, C (dưới 2%)</td><td>Cứng, đàn hồi, chịu lực tốt</td><td>Công trình xây dựng, giao thông</td></tr>
+   <tr><td><b>Inox</b></td><td>Fe, C, Cr, Ni,…</td><td>Cứng, khó bị gỉ</td><td>Đồ gia dụng, thiết bị y tế</td></tr>
+   <tr><td><b>Đuy-ra</b></td><td>Al, Cu, Mn, Mg,…</td><td>Nhẹ như nhôm nhưng bền, cứng hơn nhiều</td><td>Máy bay, ô tô</td></tr>
+  </table></div>
+  <p class="note">Hợp kim Wood (Bi 50%, Pb 25%, Sn 12,5%, Cd 12,5%) nóng chảy ở khoảng 55,5 °C, dùng làm van an toàn trong hệ thống phun nước cứu hoả.</p>
+ </div>
+</section>
+
+<section class="slide" data-lesson="Bài 20 · Sản xuất gang">
+ <div class="inner">
+  <p class="lesson">IV. Sản xuất gang, thép</p>
+  <h2>Sản xuất gang trong lò cao</h2>
+  <div class="cols">
+   <div>
+    <svg viewBox="0 0 300 300" width="100%" style="max-width:340px" role="img" aria-label="Sơ đồ lò cao luyện gang">
+     <path d="M120 30 L180 30 L230 120 L230 230 L190 270 L110 270 L70 230 L70 120 Z" fill="none" stroke="var(--steel)" stroke-width="8"/>
+     <path d="M135 15 l15 18 l15 -18" fill="none" stroke="var(--ink)" stroke-width="3"/>
+     <text x="175" y="16" font-size="11" fill="var(--ink)">quặng, than cốc, đá vôi</text>
+     <line x1="125" y1="70" x2="125" y2="200" stroke="var(--no)" stroke-width="6" marker-end="url(#ad)"/>
+     <line x1="175" y1="200" x2="175" y2="70" stroke="var(--steel)" stroke-width="6" marker-end="url(#au)"/>
+     <defs>
+      <marker id="ad" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6Z" fill="var(--no)"/></marker>
+      <marker id="au" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6Z" fill="var(--steel)"/></marker>
+     </defs>
+     <text x="20" y="140" font-size="11" fill="var(--no)">nguyên liệu ↓</text>
+     <text x="235" y="140" font-size="11" fill="var(--steel)">khí ↑</text>
+     <text x="0" y="215" font-size="11" fill="var(--ink)">không khí nóng</text>
+     <rect x="105" y="235" width="90" height="12" fill="var(--muted)" opacity=".6"/>
+     <rect x="100" y="248" width="100" height="18" fill="var(--copper)"/>
+     <text x="240" y="242" font-size="11" fill="var(--ink)">xỉ</text>
+     <text x="240" y="262" font-size="11" fill="var(--ink)">gang lỏng</text>
+     <text x="190" y="50" font-size="11" fill="var(--ink)">khí lò cao</text>
+    </svg>
+   </div>
+   <div>
+    <p><b>Nguyên liệu:</b> quặng hematite (Fe<sub>2</sub>O<sub>3</sub>), than cốc, chất tạo xỉ (CaCO<sub>3</sub>, SiO<sub>2</sub>…).</p>
+    <h3>Tạo khí CO</h3>
+    <span class="eq">C + O<sub>2</sub> <span class="ar"><i>t°</i></span> CO<sub>2</sub>&nbsp;;&nbsp; C + CO<sub>2</sub> <span class="ar"><i>t°</i></span> 2CO</span>
+    <h3>CO khử oxide sắt</h3>
+    <span class="eq">3CO + Fe<sub>2</sub>O<sub>3</sub> <span class="ar"><i>t°</i></span> 2Fe + 3CO<sub>2</sub></span>
+    <h3>Tạo xỉ</h3>
+    <span class="eq">CaO + SiO<sub>2</sub> <span class="ar"><i>t°</i></span> CaSiO<sub>3</sub></span>
+    <p style="font-size:.9em;color:var(--muted)">Sắt nóng chảy hoà tan một ít carbon và nguyên tố khác tạo thành gang lỏng. Xỉ nhẹ nổi lên trên và được tháo ra ngoài.</p>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-lesson="Bài 20 · Sản xuất thép">
+ <div class="inner">
+  <p class="lesson">IV. Sản xuất gang, thép</p>
+  <h2>Sản xuất thép trong lò thổi</h2>
+  <div class="flow">
+   <div class="box">Gang lỏng (hoặc thép phế liệu)</div><div class="arrow">→</div>
+   <div class="box">Thổi khí oxygen ở nhiệt độ cao<small>đốt cháy tạp chất C, S, Si, Mn…</small></div><div class="arrow">→</div>
+   <div class="box">Thép</div>
+  </div>
+  <div class="cols">
+   <div class="panel"><h3>Oxide dạng khí</h3><p>CO<sub>2</sub>, SO<sub>2</sub>,… thoát ra theo khí thải.</p></div>
+   <div class="panel"><h3>Oxide dạng rắn</h3><p>SiO<sub>2</sub>, MnO<sub>2</sub>,… tạo xỉ nhẹ, nổi trên thép lỏng và được tách ra.</p></div>
+  </div>
+  <p class="note">Khí thải luyện gang, thép (CO, CO<sub>2</sub>, SO<sub>2</sub>…) nếu không xử lí sẽ gây ô nhiễm không khí, mưa acid và hiệu ứng nhà kính.</p>
+ </div>
+</section>
+
+<section class="slide" data-lesson="Bài 20 · Em đã học">
+ <div class="inner">
+  <p class="lesson">Tổng kết Bài 20</p>
+  <h2>Em đã học</h2>
+  <ul>
+   <li>Quặng → làm giàu quặng → hợp chất chứa kim loại → phương pháp hoá học → kim loại.</li>
+   <li>Ba phương pháp hoá học: điện phân nóng chảy, nhiệt luyện, thuỷ luyện.</li>
+   <li>Hợp kim chứa ít nhất một kim loại cơ bản và một số kim loại hoặc phi kim khác; thường bền, cứng hơn kim loại nguyên chất.</li>
+   <li>Sản xuất gang: tạo CO, CO khử Fe<sub>2</sub>O<sub>3</sub> thành Fe, tạo xỉ CaSiO<sub>3</sub> để tách tạp chất.</li>
+   <li>Sản xuất thép: làm giảm C, Si, Mn,… trong gang bằng cách chuyển chúng thành oxide rồi loại bỏ.</li>
+  </ul>
+ </div>
+</section>
+
+</main>
+<nav class="bar" aria-label="Điều hướng slide">
+ <span class="where" id="where"></span>
+ <button id="prev" aria-label="Slide trước">Trước</button>
+ <span class="count" id="count"></span>
+ <button id="next" aria-label="Slide sau">Sau</button>
+</nav>
+</div>
+
+<script>
+(function(){
+ const metals=[
+  {s:"K",n:"Kali",c:"#6D3FA0",w:"Phản ứng mạnh ở nhiệt độ thường",a:"Có, giải phóng H₂",m:"Không dùng để đẩy kim loại (phản ứng với nước trước)",x:"Điện phân nóng chảy"},
+  {s:"Na",n:"Natri",c:"#7444A0",w:"Phản ứng mạnh ở nhiệt độ thường",a:"Có, giải phóng H₂",m:"Không dùng để đẩy kim loại (phản ứng với nước trước)",x:"Điện phân nóng chảy"},
+  {s:"Ca",n:"Calcium",c:"#7B4C9C",w:"Phản ứng ở nhiệt độ thường",a:"Có, giải phóng H₂",m:"Không dùng để đẩy kim loại (phản ứng với nước trước)",x:"Điện phân nóng chảy"},
+  {s:"Mg",n:"Magnesium",c:"#5E5F94",w:"Không đáng kể ở nhiệt độ thường",a:"Có, giải phóng H₂",m:"Đẩy được kim loại đứng sau",x:"Điện phân nóng chảy"},
+  {s:"Al",n:"Nhôm",c:"#566B8C",w:"Không phản ứng (có lớp oxide bảo vệ)",a:"Có, giải phóng H₂",m:"Đẩy được kim loại đứng sau",x:"Điện phân nóng chảy Al₂O₃"},
+  {s:"Zn",n:"Kẽm",c:"#4F7383",w:"Với hơi nước ở nhiệt độ cao",a:"Có, giải phóng H₂",m:"Đẩy được kim loại đứng sau",x:"Nhiệt luyện"},
+  {s:"Fe",n:"Sắt",c:"#4A7779",w:"Với hơi nước ở nhiệt độ cao",a:"Có, giải phóng H₂",m:"Đẩy được kim loại đứng sau",x:"Nhiệt luyện"},
+  {s:"Pb",n:"Chì",c:"#53716B",w:"Không phản ứng",a:"Có (đứng trước H)",m:"Đẩy được kim loại đứng sau",x:"Nhiệt luyện"},
+  {s:"H",n:"Hydrogen",h:true,ref:true},
+  {s:"Cu",n:"Đồng",c:"#9C5A2C",w:"Không phản ứng",a:"Không",m:"Đẩy được Ag, Au khỏi dung dịch muối",x:"Nhiệt luyện hoặc thuỷ luyện"},
+  {s:"Ag",n:"Bạc",c:"#8A8D91",w:"Không phản ứng",a:"Không",m:"Đẩy được Au khỏi dung dịch muối",x:"Thuỷ luyện"},
+  {s:"Au",n:"Vàng",c:"#B08A1E",w:"Không phản ứng",a:"Không",m:"Không đẩy được kim loại nào trong dãy",x:"Thuỷ luyện"}
+ ];
+ function build(el,interactive){
+  metals.forEach((m,i)=>{
+   const b=document.createElement(interactive?"button":"div");
+   b.className="el"+(m.h?" h":"");
+   if(!m.h) b.style.background=m.c;
+   b.innerHTML=m.s+"<small>"+m.n+"</small>";
+   if(interactive){b.type="button";b.setAttribute("aria-pressed","false");b.addEventListener("click",()=>show(i,b));}
+   el.appendChild(b);
+  });
+ }
+ const info=document.getElementById("info");
+ function show(i,btn){
+  document.querySelectorAll("#series .el").forEach(e=>e.setAttribute("aria-pressed","false"));
+  btn.setAttribute("aria-pressed","true");
+  const m=metals[i];
+  if(m.ref){info.innerHTML="<h3>H — mốc so sánh</h3><p>Hydrogen không phải kim loại. Nó là mốc: kim loại đứng <b>trước H</b> đẩy được hydrogen ra khỏi dung dịch acid, kim loại đứng <b>sau H</b> thì không.</p>";return;}
+  info.innerHTML="<h3>"+m.s+" · "+m.n+"</h3><dl><dt>Với nước</dt><dd>"+m.w+"</dd><dt>Với HCl, H₂SO₄ loãng</dt><dd>"+m.a+"</dd><dt>Với dung dịch muối</dt><dd>"+m.m+"</dd><dt>Cách tách</dt><dd>"+m.x+"</dd></dl>";
+ }
+ build(document.getElementById("series"),true);
+ const s2=document.getElementById("series2");
+ build(s2,false);
+ // colour series2 by method
+ const method={K:"var(--hot)",Na:"var(--hot)",Ca:"var(--hot)",Mg:"var(--hot)",Al:"var(--hot)",Zn:"var(--steel)",Fe:"var(--steel)",Pb:"var(--steel)",Cu:"var(--steel)",Ag:"var(--gold)",Au:"var(--gold)"};
+ s2.querySelectorAll(".el").forEach((e,i)=>{const k=metals[i].s;if(method[k])e.style.background=method[k];e.style.cursor="default";});
+
+ document.querySelectorAll(".reveal-btn").forEach(b=>b.addEventListener("click",()=>{
+  const a=b.nextElementSibling,open=a.classList.toggle("show");
+  b.setAttribute("aria-expanded",open);b.textContent=open?"Ẩn đáp án":"Hiện đáp án";
+ }));
+
+ const slides=[...document.querySelectorAll(".slide")];
+ const prog=document.getElementById("prog"),count=document.getElementById("count"),where=document.getElementById("where");
+ const prev=document.getElementById("prev"),next=document.getElementById("next");
+ let cur=0;
+ function go(n){
+  n=Math.max(0,Math.min(slides.length-1,n));
+  slides[cur].classList.remove("active");cur=n;slides[cur].classList.add("active");slides[cur].scrollTop=0;
+  prog.style.width=((cur+1)/slides.length*100)+"%";
+  count.textContent=(cur+1)+" / "+slides.length;
+  where.textContent=slides[cur].dataset.lesson||"";
+  prev.disabled=cur===0;next.disabled=cur===slides.length-1;
+  try{history.replaceState(null,"","#"+(cur+1));}catch(e){}
+ }
+ prev.onclick=()=>go(cur-1);next.onclick=()=>go(cur+1);
+ document.addEventListener("keydown",e=>{
+  if(e.target.closest("button")&&(e.key===" "||e.key==="Enter"))return;
+  if(["ArrowRight","PageDown"," "].includes(e.key)){e.preventDefault();go(cur+1);}
+  if(["ArrowLeft","PageUp"].includes(e.key)){e.preventDefault();go(cur-1);}
+  if(e.key==="Home")go(0);if(e.key==="End")go(slides.length-1);
+ });
+ let sx=null,sy=null;
+ const stage=document.getElementById("stage");
+ stage.addEventListener("touchstart",e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY;},{passive:true});
+ stage.addEventListener("touchend",e=>{if(sx===null)return;const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;
+  if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)go(cur+(dx<0?1:-1));sx=null;},{passive:true});
+ const h=parseInt(location.hash.slice(1),10);
+ slides[0].classList.add("active");go(isNaN(h)?0:h-1);
+})();
+</script>
+</body>
+</html>
